@@ -26,6 +26,9 @@ class bhs_Robot {
 		void teleopInit();
 		void teleop();
 
+		void testInit();
+		void test();
+		
 	private:
 		void normalRobotProcessing();
 
@@ -38,6 +41,8 @@ class bhs_Robot {
 		bhs_DriveTrain* m_drivetrain;
 
 		bhs_OutputManager m_outputManager;
+		
+		bhs_Test* m_testInput;
 };
 
 #endif // BHS_ROBOT_H_

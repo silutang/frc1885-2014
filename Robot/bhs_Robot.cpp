@@ -52,3 +52,16 @@ void bhs_Robot::normalRobotProcessing() {
 	
 	m_outputManager.run();
 }
+
+void bhs_Robot::testInit()
+{
+	m_sensorInput->init();
+	m_testInput->init();
+}
+
+void bhs_Robot::test()
+{
+	m_sensorInput->run();
+	m_testInput->run();
+	normalRobotProcessing();
+}

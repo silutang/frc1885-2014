@@ -27,7 +27,7 @@ void bhs_Autonomous::reset() {
 	m_gd->mdd_joystick1X = 0;
 	m_gd->mdd_joystick1Y = 0;
 	m_gd->mdd_joystick2X = 0;
-	m_gd->mdd_joystick2Y = 0;	
+	m_gd->mdd_joystick2Y = 0;
 }
 
 int bhs_Autonomous::inchesToEncoder(float a_inches) {
