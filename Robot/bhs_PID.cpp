@@ -25,6 +25,13 @@ void bhs_PID::init(double a_pMult, double a_iMult, double a_dMult) {
 	m_useMaxCumul = false;
 }
 
+void bhs_PID::setVals(double p, double d)
+{
+	init(p, 0.0, d);
+	reset();
+}
+
+
 void bhs_PID::setMaxCumul(double a_maxCumul) {
 	m_useMaxCumul = true;
 	m_maxCumul = a_maxCumul;
