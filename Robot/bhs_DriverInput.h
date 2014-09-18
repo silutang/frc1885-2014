@@ -31,6 +31,10 @@ class bhs_DriverInput {
 		static const UINT32 LOW_GOAL = 2;
 		static const UINT32 WENCH = 9;
 		
+		//TODO
+		//static const UNIT32 CATCH_UP = 
+		//static const UNIT32 CATCH_DOWN=
+		
 		bhs_DriverInput(bhs_GlobalData*);
 		virtual ~bhs_DriverInput();
 

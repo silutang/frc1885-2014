@@ -23,7 +23,8 @@ void bhs_DriverInput::run() {
 	m_gd->mdd_joystick2Y = -m_joystick2.GetAxis(Joystick::kYAxis);
 
 	m_gd->mdd_buttonUseArcadeDrive = m_joystick1.GetRawButton(BUTTON_USE_ARCADE_DRIVE);
-	m_gd->mdd_reversed = m_joystick1.GetTrigger(GenericHID::kLeftHand);
+	m_gd->mdd_reversed = false;
+			//m_joystick1.GetTrigger(GenericHID::kLeftHand);
 
 	// Intake (roller and tusks)
 	m_gd->mdi_intakeForward = m_controller.GetRawButton(INTAKE_FORWARD);
@@ -35,6 +36,13 @@ void bhs_DriverInput::run() {
 	// Shooter
 	m_gd->mds_highGoalIn = m_controller.GetRawButton(HIGH_GOAL_IN);
 	m_gd->mds_highGoalOut = m_controller.GetRawButton(HIGH_GOAL_OUT);
+	
+	//4/24/14 added shooter lock
+	m_gd->mds_ball_catch_state = m_joystick1.GetTrigger(GenericHID::kLeftHand);
+	
+	//TODO
+	//m_gd->mds_catchUp = m_controller.GetRawButton(CATCH_UP);
+	//m_gd->mds_catchDown = m_controller.GetRawButton(CATCH_DOWN);
 
 	m_gd->mds_lowGoal = m_controller.GetRawButton(LOW_GOAL);
 	m_gd->mds_wench = m_controller.GetRawButton(WENCH);

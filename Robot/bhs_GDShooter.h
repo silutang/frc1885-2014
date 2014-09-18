@@ -20,8 +20,13 @@ public:
 	//Changed
 	bool mds_doubleShot;
 	
+	//4/24/14 adding shooter lock
+	bool mds_ball_catch;
+	bool mds_ball_catch_state;
+	
 	float mds_wenchOutput;
 	DoubleSolenoid::Value mds_highGoalOutput;
+	DoubleSolenoid::Value mds_catchOutput;
 };
 
 #endif        // BHS_GD_SHOOTER_H_

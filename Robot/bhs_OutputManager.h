@@ -45,6 +45,7 @@ class bhs_OutputManager {
                 Talon m_wench;
                 Solenoid m_lowGoal;
                 DoubleSolenoid m_highGoalRelease;
+                DoubleSolenoid m_catch;
                 
                 //Solenoid m_s6, m_s7, m_s8;
                 

@@ -22,20 +22,31 @@ void bhs_Shooter::run() {
 	}
 
 	//Changed
-	if(m_ds->mds_doubleShot){
+	if(m_ds->mds_doubleShot && m_ds->mds_ball_catch){
 		m_ds->mds_highGoalOut = true;
 		m_ds->mds_lowGoal = true;
 	}
 	
+	//4/24/14 ball holding
+	if(m_ds->mds_ball_catch != m_ds->mds_ball_catch_state) {
+		m_ds->mds_ball_catch = m_ds->mds_ball_catch_state;
+		if(m_ds->mds_ball_catch) {
+			m_ds->mds_catchOutput = DoubleSolenoid::kForward;
+		} else {
+			m_ds->mds_catchOutput = DoubleSolenoid::kReverse;
+		}
+	} else {
+		m_ds->mds_catchOutput = DoubleSolenoid::kOff;
+	}
+
+	
 	if(m_ds->mds_highGoalIn) {
 		m_ds->mds_highGoalOutput = DoubleSolenoid::kForward;
-	} else if(m_ds->mds_highGoalOut){
+	} else if(m_ds->mds_highGoalOut && m_ds->mds_ball_catch){
 		m_ds->mds_highGoalOutput = DoubleSolenoid::kReverse;
 	} else {
 		m_ds->mds_highGoalOutput = DoubleSolenoid::kOff;
 	}
-
-
 
 /*
  * State machine to automatically wind down the winch as soon as high goal is fired.

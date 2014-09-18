@@ -33,6 +33,7 @@ public:
 
 	bool ready(void);
 	void xmitRawData(int header,int length,char* apData);
+	bool readHotGoal();
 	bool isHotGoal();
 
 	static int ServerSocketTask(bhs_PCDataServer* apThis);
@@ -41,6 +42,7 @@ private:
 	bhs_PCDataServer(void);
 	int ServerTask();
 	bool mbServerReady;
+	bool bHotGoal;
 	SEM_ID mExternalUserSem;
 	SEM_ID mServerReadySem;
 	SEM_ID mCurrentConnectionDone;

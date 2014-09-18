@@ -20,6 +20,7 @@ bhs_OutputManager::bhs_OutputManager(bhs_GlobalData* a_gd)
 , m_wench(bhs_Constants::SHOOTER_WENCH_RELAY)
 , m_lowGoal(bhs_Constants::SHOOTER_LOW_GOAL_SOLENOID)
 , m_highGoalRelease(bhs_Constants::SHOOTER_HIGH_GOAL_IN_SOLENOID, bhs_Constants::SHOOTER_HIGH_GOAL_OUT_SOLENOID)
+, m_catch(bhs_Constants::CATCH_IN_SOLENOID, bhs_Constants::CATCH_OUT_SOLENOID)
 #endif 		// SHOOTER
 //, m_s6(5)
 //, m_s7(7)
@@ -52,6 +53,7 @@ void bhs_OutputManager::init() {
 	m_wench.Set(0);
 	m_lowGoal.Set(false);
 	m_highGoalRelease.Set(DoubleSolenoid::kOff);
+	m_catch.Set(DoubleSolenoid::kOff);
 #endif
 }
 
@@ -97,5 +99,6 @@ void bhs_OutputManager::runPneumatics() {
 #if SHOOTER
 	m_lowGoal.Set(m_gd->mds_lowGoal);
 	m_highGoalRelease.Set(m_gd->mds_highGoalOutput);
+	m_catch.Set(m_gd->mds_catchOutput);
 #endif
 }

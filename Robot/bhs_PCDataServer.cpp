@@ -7,6 +7,7 @@ bhs_PCDataServer::bhs_PCDataServer(void)
 : mbServerReady(false)
 , mConnectedSocket(0)
 {
+		bHotGoal = false;
         mExternalUserSem = semBCreate(SEM_Q_FIFO,SEM_FULL);
         mServerReadySem = semBCreate(SEM_Q_FIFO,SEM_FULL);
         mCurrentConnectionDone = semBCreate(SEM_Q_FIFO,SEM_EMPTY);
@@ -53,25 +54,33 @@ void bhs_PCDataServer::xmitRawData(int anHeader,int anLen,char* apData)
     }
 }
 
-bool bhs_PCDataServer::isHotGoal()
+bool bhs_PCDataServer::isHotGoal() {
+	return bHotGoal;
+}
+
+bool bhs_PCDataServer::readHotGoal()
 {
+	static bool isHot = false;
+	static bool rcvHot = false;
 	int anHeader;
 	int anLen;
-	char* apData;
+	char apData[1];
 	fd_set set;
 	int rcv;
 	struct timeval timeout;
-    if(mbServerReady)
+    if(mbServerReady && !rcvHot)
     {
     	FD_ZERO(&set);
+    	semTake(mExternalUserSem,WAIT_FOREVER);
     	FD_SET(mConnectedSocket,&set);
     	
     	timeout.tv_sec = 5;
     	timeout.tv_usec = 0;
-    	
+
     	rcv = select(mConnectedSocket+1,&set,NULL,NULL,&timeout);
     	
     	if(rcv == -1) {
+    		semGive(mExternalUserSem);
             semTake(mServerReadySem,WAIT_FOREVER);
             mbServerReady = false;//set Server to false
             semGive(mServerReadySem);
@@ -80,9 +89,9 @@ bool bhs_PCDataServer::isHotGoal()
             mConnectedSocket = 0;
             semGive(mCurrentConnectionDone);//allow server task to accept new connection
     	} else if (rcv == 0) {
-    		return true;
+    		semGive(mExternalUserSem);
     	} else {
-
+    		rcvHot = false;
 			// read header
 			int headerSend = read(mConnectedSocket, reinterpret_cast<char*>(&anHeader), sizeof(anHeader));
 	
@@ -91,10 +100,12 @@ bool bhs_PCDataServer::isHotGoal()
 	
 			// read data
 			int sent = read (mConnectedSocket, reinterpret_cast<char*>(apData), anLen);
-	
+			semGive(mExternalUserSem);
+
 			// The PC probably closed connection.
 			if (headerSend == ERROR || lengthSend == ERROR || sent == ERROR)
 			{
+//				semGive(mExternalUserSem);
 					semTake(mServerReadySem,WAIT_FOREVER);
 					mbServerReady = false;//set Server to false
 					semGive(mServerReadySem);
@@ -104,12 +115,11 @@ bool bhs_PCDataServer::isHotGoal()
 					semGive(mCurrentConnectionDone);//allow server task to accept new connection
 					return true;
 			}
-			
 			//TODO: get the boolean and return - guess that its hot for now...
-			return (anLen > 0 && apData[0] == 1);
+			isHot = (anLen > 0 && apData[0] == 1);
     	}
     }
-    return true;
+    return isHot;
 }
 
 
@@ -186,9 +196,11 @@ int bhs_PCDataServer::ServerTask()
                                 semTake(mServerReadySem,WAIT_FOREVER);
                                 mbServerReady = true;
                                 semGive(mServerReadySem);
-
+                                while(mbServerReady) {
+                                	bHotGoal = readHotGoal();
+                                	Wait(1);
+                                }
                                 semTake(mCurrentConnectionDone,WAIT_FOREVER);//wait until PC close connection to accept new connection
-                                //rcvData();
                         }
                 }
                 close(pcSock);          

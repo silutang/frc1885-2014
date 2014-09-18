@@ -11,6 +11,11 @@ bhs_GDShooter::bhs_GDShooter() {
 	//Changed
 	mds_doubleShot = false;
 	
+	//4/24/14
+	mds_ball_catch = false;
+	mds_ball_catch_state = true;
+	
 	mds_wenchOutput = 0;
 	mds_highGoalOutput = DoubleSolenoid::kOff;
+	mds_catchOutput = DoubleSolenoid::kForward;
 }

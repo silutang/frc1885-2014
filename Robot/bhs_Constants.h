@@ -71,6 +71,8 @@ public:
         static const int SHOOTER_LOW_GOAL_SOLENOID = 6;
         static const int SHOOTER_HIGH_GOAL_IN_SOLENOID = 3;
         static const int SHOOTER_HIGH_GOAL_OUT_SOLENOID = 4;
+        static const int CATCH_IN_SOLENOID = 7;
+        static const int CATCH_OUT_SOLENOID = 8;
 #endif // SHOOTER
 };
 
